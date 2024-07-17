@@ -86,6 +86,20 @@ const char* Bureaucrat::GradeTooLowException::what() const throw()
     return ("exception: Bureaucrat grade is too low!");
 }
 
+void Bureaucrat::signForm(Form &form) {
+    try
+	{
+        form.beSigned(*this);
+        std::cout << this->getName() << " signed " << form.getName() << std::endl;
+    }
+	catch (const std::exception &err)
+	{
+        std::cout << \
+		this->getName() << " couldn’t sign " << form.getName() << " because " \
+		<< err.what() \
+		<< std::endl;
+    }
+}
 
 
 std::ostream & operator<<(std::ostream & out, Bureaucrat const &obj)
