@@ -26,7 +26,6 @@ int main(void)
     std::cout << f << std::endl;
     b.signForm(f);
     std::cout << f << std::endl;
-    f1.getExecuteGrade
 
     return (0);
 }
