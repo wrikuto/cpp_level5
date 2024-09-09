@@ -50,50 +50,62 @@ void PmergeMe::sort_and_measure_time(const std::vector<int> &input)
     std::cout << "Time to process a range of " << _lst.size() << " elements with std::list: " << lst_time << " us" << std::endl;
 }
 
-// Ford-Johnsonアルゴリズムによるソート
+
+
+
+// Ford-Johnsonアルゴリズムによるソート関数
 template <typename Container>
 void PmergeMe::ford_johnson_sort(Container &container)
 {
-    if (container.size() <= 1)
+    // コンテナの要素数を取得
+    size_t n = container.size();
+    if (n <= 1)
         return;
 
-    // ペアリングステップ: 要素をペアにしていく
-    Container paired;
-    typename Container::iterator it = container.begin();
+    // 2つのグループに分割してペアにする
+    std::vector<std::pair<int, int> > pairs;
+    typename Container::iterator it = container.begin(); // C++98準拠のためautoを使用しない
     while (it != container.end())
     {
-        typename Container::iterator next = it;
-        ++next;
-        if (next != container.end() && *it > *next)
-            std::swap(*it, *next);  // 必要に応じて要素を交換
-
-        paired.push_back(*it);  // ペアの中の小さい方を保存
+        int first = *it;
         ++it;
-        if (next != container.end()) ++it;
-    }
-
-    // 残った要素が奇数個の場合、最後の要素を直接追加
-    if (container.size() % 2 != 0)
-    {
-        paired.push_back(container.back());
-    }
-
-    // 再帰的にFord-Johnsonソートを適用
-    ford_johnson_sort(paired);
-
-    // ペアの大きい方を挿入していく（挿入ソートに相当）
-    typename Container::iterator insert_pos = paired.begin();
-    for (typename Container::iterator i = insert_pos; i != container.end(); ++i)
-    {
-        if (std::find(paired.begin(), paired.end(), *i) == paired.end())  // ペアの大きい方かをチェック
+        if (it != container.end())
         {
-            typename Container::iterator pos = std::lower_bound(paired.begin(), insert_pos, *i);
-            paired.insert(pos, *i);
+            int second = *it;
+            pairs.push_back(std::make_pair(std::min(first, second), std::max(first, second)));
+            ++it;
+        }
+        else
+        {
+            // 奇数の場合、最後の要素をそのまま格納
+            pairs.push_back(std::make_pair(first, first));
         }
     }
 
-    // 最終的な結果をコンテナに反映
-    container = paired;
+    // 各ペアの最大値を抽出し、再帰的にソート
+    std::vector<int> max_values;
+    for (size_t i = 0; i < pairs.size(); ++i)
+    {
+        max_values.push_back(pairs[i].second);
+    }
+    ford_johnson_sort(max_values); // 再帰的にソート
+
+    // ソートされた最大値のリストにペアの最小値を挿入
+    std::vector<int> sorted_sequence = max_values;
+    for (size_t i = 0; i < pairs.size(); ++i)
+    {
+        // 挿入位置を見つける
+        typename std::vector<int>::iterator position = std::lower_bound(sorted_sequence.begin(), sorted_sequence.end(), pairs[i].first);
+
+        // 挿入する値が最大値リストにない場合のみ挿入
+        if (position == sorted_sequence.end() || *position != pairs[i].first)
+        {
+            sorted_sequence.insert(position, pairs[i].first);
+        }
+    }
+
+    // ソート済みの結果をコンテナにコピー
+    std::copy(sorted_sequence.begin(), sorted_sequence.end(), container.begin());
 }
 
 // Ford-Johnsonソートの時間計測
