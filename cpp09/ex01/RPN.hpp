@@ -20,8 +20,6 @@ public:
 	RPN &operator=(const RPN &other);
 	~RPN();
 	void calculate(const std::string &expression);
-
-
 };
 
 #endif

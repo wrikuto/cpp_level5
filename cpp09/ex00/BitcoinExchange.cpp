@@ -125,7 +125,12 @@ void BitcoinExchange::read_input(std::string filepath)
 				else if (std::stod(date_value[1]) < 0)
 					std::cout << "error: positive number required." << std::endl;
 				else
-					std::cout << date_value[0] << " => " << date_value[1] << " = " << std::stod(date_value[1]) * p.second << std::endl;
+				{
+					std::cout \
+					<< date_value[0] << " => " << date_value[1] \
+					<< " = " << std::stod(date_value[1]) * p.second \
+					<< std::endl;
+				}
 			}
 			catch (...)
 			{
