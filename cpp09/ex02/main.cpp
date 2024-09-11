@@ -5,7 +5,7 @@ int main(int argc, char **argv)
 {
 	if (argc < 2)
 	{
-		std::cerr << "Error: Invalid number of arguments" << std::endl;
+		std::cerr << "error: invalid arg." << std::endl;
 		return (1);
 	}
 
@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 		{
 			int num = std::stoi(argv[i]);
 			if (num < 0)
-				throw std::runtime_error("Error: Negative numbers are not allowed");
+				throw std::runtime_error("error: Negative numbers are not allowed");
 			input.push_back(num);
 		}
 

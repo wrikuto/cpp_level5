@@ -85,7 +85,7 @@ void PmergeMe::ford_johnson_sort(Container &container)
 
 	std::vector<std::pair<int, int> > pairs;
 	typename Container::iterator it = container.begin();
-	int dummy_value = std::numeric_limits<int>::min();
+	int dummy_value = -1;
 
 	while (it != container.end())
 	{
@@ -119,8 +119,8 @@ void PmergeMe::ford_johnson_sort(Container &container)
 			continue; // ダミーを無視
 
 		// 挿入位置を決定
-		typename std::vector<int>::iterator position \
-		= std::lower_bound(sorted_sequence.begin(), sorted_sequence.end(), pairs[i].first);
+		typename std::vector<int>::iterator position = \
+			std::lower_bound(sorted_sequence.begin(), sorted_sequence.end(), pairs[i].first);
 
 		sorted_sequence.insert(position, pairs[i].first);
 	}
@@ -131,11 +131,11 @@ void PmergeMe::ford_johnson_sort(Container &container)
 /**
  * @brief ソートにかかる時間を計測する関数。
  * 
- * コンテナに対してFord-Johnsonソートを実行し、ソート処理にかかった時間をミリ秒単位で計測。
+ * コンテナに対してFord-Johnsonソートを実行し、ソート処理にかかった時間をマイクロ秒単位で計測。
  * 
  * @tparam Container ソート対象となるコンテナ型（例：std::vectorやstd::list）。
  * @param container ソート対象のコンテナ。
- * @return double ソートにかかった時間（ミリ秒）。
+ * @return double ソートにかかった時間（マイクロ秒）。
  */
 template <typename Container>
 double PmergeMe::measure_sort_time(Container &container)
