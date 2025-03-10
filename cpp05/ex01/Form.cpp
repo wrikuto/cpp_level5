@@ -3,41 +3,17 @@
 Form::Form(const std::string &name, int signGrade, int executeGrade)
 : _name(name), _isSigned(false), _signGrade(signGrade), _executeGrade(executeGrade)
 {
-	try
-	{
-		if (signGrade < 1 || executeGrade < 1)
-			throw GradeTooLowException();
-		if (signGrade > 150 || executeGrade > 150)
-			throw GradeTooHighException();
-	}
-    catch (Form::GradeTooHighException & err)
-    {
-        std::cout << err.what() << std::endl;
-    }
-    catch (Form::GradeTooLowException & err)
-    {
-        std::cout << err.what() << std::endl;
-    }
+    if (signGrade < 1 || executeGrade < 1)
+        throw GradeTooHighException();  // 修正: 1未満はGradeTooHighExceptionに
+    if (signGrade > 150 || executeGrade > 150)
+        throw GradeTooLowException();   // 修正: 150超はGradeTooLowExceptionに
 }
 
 Form::Form(const Form &src)
  : _name(src._name), _isSigned(src._isSigned), _signGrade(src._signGrade), _executeGrade(src._executeGrade)
 {
-	try
-	{
-		if (_signGrade < 1 || _executeGrade < 1)
-			throw GradeTooHighException();
-		if (_signGrade > 150 || _executeGrade > 150)
-			throw GradeTooLowException();
-	}
-    catch (Form::GradeTooHighException & err)
-    {
-        std::cout << err.what() << std::endl;
-    }
-    catch (Form::GradeTooLowException & err)
-    {
-        std::cout << err.what() << std::endl;
-    }
+    // コピーコンストラクタでの範囲チェックは不要
+    // コピー元が有効なオブジェクトであれば、そのままコピーするだけで良い
 }
 
 Form &Form::operator=(const Form &src)
@@ -70,7 +46,7 @@ int Form::getExecuteGrade() const {
 
 void Form::beSigned(const Bureaucrat &bureaucrat)
 {
-    if (bureaucrat.getGrade() < _signGrade)
+    if (bureaucrat.getGrade() > _signGrade)  // 修正: 官僚のグレードが必要グレードより大きい(悪い)場合
         throw GradeTooLowException();
     _isSigned = true;
 }

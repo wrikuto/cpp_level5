@@ -46,5 +46,5 @@ AForm *Intern::makeForm(std::string formName, std::string target) const
 	}
 
 	std::cout << "Intern couldn't create form: " << formName << std::endl;
-	return (nullptr);
+	return (NULL);
 }
