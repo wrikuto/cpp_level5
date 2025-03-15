@@ -13,9 +13,9 @@ private:
 	unsigned int _len;
 
 public:
-	Array() : _elements(nullptr), _len(0) {}
+	Array() : _elements(NULL), _len(0) {}
 	Array(unsigned int n) : _elements(new T[n]()), _len(n) {}
-	Array(const Array& other) : _elements(nullptr), _len(0)
+	Array(const Array& other) : _elements(NULL), _len(0)
 	{
 		*this = other;
 	}
@@ -33,7 +33,7 @@ public:
 					_elements[i] = other._elements[i];
 			}
 			else
-				_elements = nullptr;
+				_elements = NULL;
 		}
 		return (*this);
 	}

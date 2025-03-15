@@ -1,4 +1,6 @@
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 #include "Array.hpp"
 
 #define MAX_VAL 750
@@ -15,7 +17,6 @@ int main(int, char**)
         numbers[i] = value;
         mirror[i] = value;
     }
-    //SCOPE
     {
         Array<int> tmp = numbers;
         Array<int> test(tmp);
@@ -50,8 +51,18 @@ int main(int, char**)
     {
         numbers[i] = rand();
     }
+    
+    Array<int> original(3);
+    original[0] = 10;
+    original[1] = 20;
+    original[2] = 30;
+    
+    Array<int> copy = original;
+    
+    original[0] = 100;
+    
+    std::cout << "original[0]: " << original[0] << ", copy[0]: " << copy[0] << std::endl;
+    
     delete [] mirror;
     return 0;
 }
-
-
