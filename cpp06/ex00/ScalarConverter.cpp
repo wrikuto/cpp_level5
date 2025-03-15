@@ -1,20 +1,22 @@
-#include "converter.hpp"
+#include "ScalarConverter.hpp"
 #include <iostream>
 #include <iomanip>
 #include <sstream>
-
-Converter::Converter(void) 
+#include <cstdlib>
+#include <cctype>
+#include <limits>
+ScalarConverter::ScalarConverter(void) 
 {}
 
-Converter::~Converter(void) 
+ScalarConverter::~ScalarConverter(void) 
 {}
 
-Converter::Converter(const Converter &) 
+ScalarConverter::ScalarConverter(const ScalarConverter &) 
 {}
 
-Converter &Converter::operator=(const Converter &) 
+ScalarConverter &ScalarConverter::operator=(const ScalarConverter &) 
 {
-	return (*this);
+    return (*this);
 }
 
 static bool _isInteger(const std::string &str)
@@ -28,11 +30,15 @@ static bool _isInteger(const std::string &str)
 
 static bool _isFloat(const std::string &str)
 {
-    std::istringstream iss(str);
-    float val;
-
-    iss >> std::noskipws >> val;
-    return (iss.eof() && !iss.fail());
+    if (str.length() > 1 && str[str.length() - 1] == 'f')
+    {
+        std::string temp = str.substr(0, str.length() - 1);
+        std::istringstream iss(temp);
+        float val;
+        iss >> std::noskipws >> val;
+        return (iss.eof() && !iss.fail());
+    }
+    return false;
 }
 
 static bool _isDouble(const std::string &str)
@@ -44,8 +50,33 @@ static bool _isDouble(const std::string &str)
     return (iss.eof() && !iss.fail());
 }
 
-void Converter::convert(const std::string &literal) 
+void ScalarConverter::convert(const std::string &literal) 
 {
+    if (literal == "nan" || literal == "nanf")
+    {
+        std::cout << "char: impossible" << std::endl;
+        std::cout << "int: impossible" << std::endl;
+        std::cout << "float: nanf" << std::endl;
+        std::cout << "double: nan" << std::endl;
+        return;
+    }
+    else if (literal == "+inf" || literal == "+inff")
+    {
+        std::cout << "char: impossible" << std::endl;
+        std::cout << "int: impossible" << std::endl;
+        std::cout << "float: +inff" << std::endl;
+        std::cout << "double: +inf" << std::endl;
+        return;
+    }
+    else if (literal == "-inf" || literal == "-inff")
+    {
+        std::cout << "char: impossible" << std::endl;
+        std::cout << "int: impossible" << std::endl;
+        std::cout << "float: -inff" << std::endl;
+        std::cout << "double: -inf" << std::endl;
+        return;
+    }
+
     char charValue;
     int intValue;
     float floatValue;
@@ -62,21 +93,22 @@ void Converter::convert(const std::string &literal)
     {
         if (_isInteger(literal))
         {
-            intValue = std::stoi(literal);
+            intValue = std::atoi(literal.c_str());
             charValue = static_cast<char>(intValue);
             floatValue = static_cast<float>(intValue);
             doubleValue = static_cast<double>(intValue);
         }
         else if (_isFloat(literal))
         {
-            floatValue = std::stof(literal);
+            std::string temp = literal.substr(0, literal.length() - 1);
+            floatValue = static_cast<float>(std::atof(temp.c_str()));
             intValue = static_cast<int>(floatValue);
             charValue = static_cast<char>(floatValue);
             doubleValue = static_cast<double>(floatValue);
         }
         else if (_isDouble(literal))
         {
-            doubleValue = std::stod(literal);
+            doubleValue = std::atof(literal.c_str());
             intValue = static_cast<int>(doubleValue);
             charValue = static_cast<char>(doubleValue);
             floatValue = static_cast<float>(doubleValue);
@@ -84,7 +116,7 @@ void Converter::convert(const std::string &literal)
         else
         {
             std::cout << "Conversion impossible" << std::endl;
-            return ;
+            return;
         }
     }
 
@@ -97,5 +129,5 @@ void Converter::convert(const std::string &literal)
     std::cout << "float: " << std::fixed << std::setprecision(1) << floatValue << "f" << std::endl;
     std::cout << "double: " << doubleValue << std::endl;
 
-    return ;
+    return;
 }
