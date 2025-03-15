@@ -13,5 +13,17 @@ int main()
     std::cout << "Shortest Span: " << sp.shortestSpan() << std::endl;
     std::cout << "Longest Span: " << sp.longestSpan() << std::endl;
 
+    Span largeSpan(10000);
+    
+    std::vector<int> numbers(10000);
+    for (int i = 0; i < 10000; i++) {
+        numbers[i] = i;
+    }
+    
+    largeSpan.addNumber(numbers.begin(), numbers.end());
+    
+    std::cout << "Large Span - Shortest: " << largeSpan.shortestSpan() << std::endl;
+    std::cout << "Large Span - Longest: " << largeSpan.longestSpan() << std::endl;
+
     return (0);
 }

@@ -1,4 +1,3 @@
-
 #include "easyfind.hpp"
 #include <vector>
 #include <list>
@@ -29,6 +28,18 @@ int main()
 	catch (const std::exception& e)
 	{
 		std::cout << "Value not found" << std::endl;
+	}
+
+	std::list<int> lst;
+	lst.push_back(10);
+	lst.push_back(20);
+	lst.push_back(30);
+	
+	try {
+		std::list<int>::iterator it = easyfind(lst, 20);
+		std::cout << "Found in list: " << *it << std::endl;
+	} catch (const std::exception& e) {
+		std::cout << "not found in list"<< std::endl;
 	}
 
 	return (0);
