@@ -6,7 +6,6 @@
 # include <sstream>
 # include <map>
 # include <string>
-# include <vector>
 # include <cctype>
 
 class BitcoinExchange
@@ -24,7 +23,7 @@ class BitcoinExchange
         void get_data(std::string date, float value);
         void read_input(std::string inputPath);
         std::map<std::string, float> get_data();
-        std::vector<std::string> split(std::string str, char delimiter);
+        void split(std::string str, char delimiter, std::string& first, std::string& second);
 };
 
 #endif

@@ -103,32 +103,40 @@ std::map<std::string, float> BitcoinExchange::get_data()
     return (this->_data);
 }
 
-std::vector<std::string> BitcoinExchange::split(std::string str, char delimiter)
+
+void BitcoinExchange::split(std::string str, char delimiter, std::string& first, std::string& second)
 {
-    std::vector<std::string> substrings;
-    std::string substring = "";
-    for (size_t i = 0; i < str.length(); i++)
+    first = "";
+    second = "";
+    
+    size_t i = 0;
+    bool foundDelimiter = false;
+    
+    while (i < str.length())
     {
-        if (str[i] != delimiter)
+        if (str[i] == delimiter)
         {
-            substring += str[i];
-        }
-        else
-        {
-            substrings.push_back(substring);
-            while (i + 1 < str.length() && str[i + 1] == delimiter)
+            foundDelimiter = true;
+            i++;
+            while (i < str.length() && str[i] == delimiter)
                 i++;
-            substring = "";
+            break;
         }
+        first += str[i];
+        i++;
     }
-    substrings.push_back(substring);
-    return substrings;
+    
+    while (i < str.length())
+    {
+        second += str[i];
+        i++;
+    }
 }
 
 void BitcoinExchange::read_input(std::string filepath)
 {
     std::string	line;
-    std::vector<std::string> date_value;
+    std::string date_part, value_part;
     std::ifstream file2(filepath.c_str());
     std::map<std::string, float>::iterator it;
     std::pair<std::string, float> p;
@@ -141,16 +149,16 @@ void BitcoinExchange::read_input(std::string filepath)
     std::getline(file2, line);
     while(std::getline(file2, line))
     {
-        date_value = this->split(line, '|');
-        if (date_value.size() < 2 || date_value[1].length() == 0)
+        this->split(line, '|', date_part, value_part);
+        if (value_part.length() == 0)
         {
-            std::string trimmed_date = date_value[0];
+            std::string trimmed_date = date_part;
             trim(trimmed_date);
             std::cout << "Error: bad input => " << trimmed_date << std::endl;
             continue;
         }
         
-        std::string trimmed_date = trim(date_value[0]);
+        std::string trimmed_date = trim(date_part);
         
         if (!isValidDateFormat(trimmed_date))
         {
@@ -169,7 +177,7 @@ void BitcoinExchange::read_input(std::string filepath)
         p = *(--it);
         try
         {
-            float value = std::atof(trim(date_value[1]).c_str());
+            float value = std::atof(trim(value_part).c_str());
             if (value > 1000)
                 std::cout << "Error: too large a number." << std::endl;
             else if (value < 0)
