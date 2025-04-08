@@ -27,7 +27,9 @@ public:
 	~PmergeMe();
 
 	void sort_and_measure_time(const std::vector<int> &input);
-
+	// PmergeMe.hpp に追加するメソッド宣言
+	std::vector<size_t> generate_jacobsthal_sequence(size_t n);
+	std::vector<size_t> generate_insertion_order(size_t n);
 
 };
 
